@@ -1,22 +1,21 @@
-const score = results => {
-  if (results.length === 0) {
-    return "";
-  }
-  const scores = {};
-  for (let char of results) {
-    const scoreDifference = char === char.toUpperCase() ? -1 : 1;
-    char = char.toLowerCase();
-    scores[char]
-      ? (scores[char] += scoreDifference)
-      : (scores[char] = scoreDifference);
-  }
-  return Object.entries(scores)
+const score = results =>
+  Object.entries(convertToObject(results.split("")))
     .sort(
       ([aKey, aValue], [bKey, bValue]) =>
         aValue === bValue ? aKey > bKey : aValue < bValue
     )
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
+
+const convertToObject = chars => {
+  return chars.reduce((acc, char) => {
+    const valueChange = char === char.toUpperCase() ? -1 : 1;
+    char = char.toLowerCase();
+    return {
+      ...acc,
+      [char]: acc[char] ? acc[char] + valueChange : valueChange
+    };
+  }, {});
 };
 
 test("returns empty string for empty string", () => {
