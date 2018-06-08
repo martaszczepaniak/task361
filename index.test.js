@@ -1,3 +1,5 @@
-test("example", () => {
-  expect(2).toEqual(2);
+const score = results => "";
+
+test("returns empty string for empty string", () => {
+  expect(score("")).toEqual("");
 });
