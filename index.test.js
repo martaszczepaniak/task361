@@ -11,9 +11,14 @@ const score = results => {
     }
   }
   let scoresString = "";
-  Object.entries(scores).forEach(([key, value]) => {
-    scoresString = scoresString.concat(`${key}: ${value}, `);
-  });
+  Object.entries(scores)
+    .sort(
+      ([aKey, aValue], [bKey, bValue]) =>
+        aValue === bValue ? aKey > bKey : aValue < bValue
+    )
+    .forEach(([key, value]) => {
+      scoresString = scoresString.concat(`${key}: ${value}, `);
+    });
   return scoresString.slice(0, -2);
 };
 
@@ -35,4 +40,8 @@ test("returns score for 2 results", () => {
 
 test("returns score for 2 same results", () => {
   expect(score("aa")).toEqual("a: 2");
+});
+
+test("returns score for different and same results", () => {
+  expect(score("dbba")).toEqual("b: 2, a: 1, d: 1");
 });
