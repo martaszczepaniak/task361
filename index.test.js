@@ -4,7 +4,11 @@ const score = results => {
   }
   const scores = {};
   for (let char of results) {
-    scores[char] = 1;
+    if (Object.keys(scores).includes(char)) {
+      scores[char] += 1;
+    } else {
+      scores[char] = 1;
+    }
   }
   let scoresString = "";
   Object.entries(scores).forEach(([key, value]) => {
@@ -27,4 +31,8 @@ test("returns score for 1 different result", () => {
 
 test("returns score for 2 results", () => {
   expect(score("ab")).toEqual("a: 1, b: 1");
+});
+
+test("returns score for 2 same results", () => {
+  expect(score("aa")).toEqual("a: 2");
 });
