@@ -4,22 +4,19 @@ const score = results => {
   }
   const scores = {};
   for (let char of results) {
-    if (Object.keys(scores).includes(char)) {
-      scores[char] += 1;
-    } else {
-      scores[char] = 1;
-    }
+    const scoreDifference = char === char.toUpperCase() ? -1 : 1;
+    char = char.toLowerCase();
+    scores[char]
+      ? (scores[char] += scoreDifference)
+      : (scores[char] = scoreDifference);
   }
-  let scoresString = "";
-  Object.entries(scores)
+  return Object.entries(scores)
     .sort(
       ([aKey, aValue], [bKey, bValue]) =>
         aValue === bValue ? aKey > bKey : aValue < bValue
     )
-    .forEach(([key, value]) => {
-      scoresString = scoresString.concat(`${key}: ${value}, `);
-    });
-  return scoresString.slice(0, -2);
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(", ");
 };
 
 test("returns empty string for empty string", () => {
@@ -44,4 +41,8 @@ test("returns score for 2 same results", () => {
 
 test("returns score for different and same results", () => {
   expect(score("dbba")).toEqual("b: 2, a: 1, d: 1");
+});
+
+test("returns score for example results", () => {
+  expect(score("dbbaCEDbdAacCEAadcB")).toEqual("b: 2, d: 2, a: 1, c: 0, e: -2");
 });
