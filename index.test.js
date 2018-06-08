@@ -2,7 +2,15 @@ const score = results => {
   if (results.length === 0) {
     return "";
   }
-  return `${results}: 1`;
+  const scores = {};
+  for (let char of results) {
+    scores[char] = 1;
+  }
+  let scoresString = "";
+  Object.entries(scores).forEach(([key, value]) => {
+    scoresString = scoresString.concat(`${key}: ${value}, `);
+  });
+  return scoresString.slice(0, -2);
 };
 
 test("returns empty string for empty string", () => {
@@ -15,4 +23,8 @@ test("returns score for 1 result", () => {
 
 test("returns score for 1 different result", () => {
   expect(score("b")).toEqual("b: 1");
+});
+
+test("returns score for 2 results", () => {
+  expect(score("ab")).toEqual("a: 1, b: 1");
 });
